@@ -903,30 +903,40 @@
         const API_PORTS = [5000, 5001, 8000, 8080, 3000];
 
         // Find working API
-        async function findWorkingAPI() {
-            const protocol = window.location.protocol;
-            const hostname = window.location.hostname;
 
-            for (const port of API_PORTS) {
-                const testUrl = `${protocol}//${hostname}:${port}/api`;
-                try {
-                    const response = await fetch(`${testUrl}/health`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (data.success) {
-                            API_BASE_URL = testUrl;
-                            return true;
-                        }
-                    }
-                } catch (e) {
-                    continue;
-                }
+        async function findWorkingAPI() {
+          // 1) Önce aynı origin /api'yi dene (Vercel ve `vercel dev` için doğru adres)
+          try {
+            const res = await fetch(`/api/health`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success) {
+                API_BASE_URL = `/api`;
+                return true;
+              }
             }
-            return false;
+          } catch (_) { /* sessiz geç */ }
+
+          // 2) Olmazsa yerel geliştirme için port taramasına düş
+          const protocol = window.location.protocol;
+          const hostname = window.location.hostname;
+          const PORTS = [5000, 5001, 8000, 8080, 3000];
+          for (const port of PORTS) {
+            const testUrl = `${protocol}//${hostname}:${port}/api`;
+            try {
+              const r = await fetch(`${testUrl}/health`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+              if (r.ok) {
+                const data = await r.json();
+                if (data.success) {
+                  API_BASE_URL = testUrl;
+                  return true;
+                }
+              }
+            } catch (_) { continue; }
+          }
+          return false;
         }
+
 
         // Update connection status
         function updateConnectionStatus(status, message) {
