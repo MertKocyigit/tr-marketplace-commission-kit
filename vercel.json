@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.py": {
+      "runtime": "python3.12",
+      "maxDuration": 10,
+      "memory": 1024,
+      "includeFiles": ["data/**", "index.html"]
+    }
+  },
+  "rewrites": [
+    { "source": "/(trendyol|hepsiburada|n11|amazon|ciceksepeti|pttavm)", "destination": "/index.html" },
+    { "source": "/local/(trendyol|hepsiburada|n11|amazon|ciceksepeti|pttavm)", "destination": "/index.html" }
+  ]
+}
