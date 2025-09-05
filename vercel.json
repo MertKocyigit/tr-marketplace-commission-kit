@@ -10,8 +10,8 @@
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" },
-    { "source": "/(trendyol|hepsiburada|n11|amazon|ciceksepeti|pttavm)", "destination": "/index.html" },
-    { "source": "/local/(trendyol|hepsiburada|n11|amazon|ciceksepeti|pttavm)", "destination": "/index.html" }
+    { "source": "/api/(.*)", "destination": "/api/index.py" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
