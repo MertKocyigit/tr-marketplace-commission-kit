@@ -6,12 +6,11 @@
     "api/**/*.py": {
       "memory": 1024,
       "maxDuration": 10,
-      "includeFiles": "data/**"
+      "includeFiles": "{data/**,_legacy/**}"
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.py" },
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/(.*)", "destination": "/api/index" }
   ]
 }
